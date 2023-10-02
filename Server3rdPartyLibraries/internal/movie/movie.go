@@ -6,7 +6,7 @@ type Movie struct {
 	Genre    string `json:"genre"`
 	Director string `json:"director"`
 
-	Cast []Actor `json:"cast" gorm:"many2many:movie_cast;"` // Many-to-Many relationship
+	Cast []Actor `json:"cast,omitempty" gorm:"many2many:movie_cast;"` // Many-to-Many relationship
 }
 
 type Actor struct {
