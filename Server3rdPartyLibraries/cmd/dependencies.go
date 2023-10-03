@@ -13,6 +13,7 @@ type Dependencies struct {
 
 func NewDependencies() *Dependencies {
 	movieDB, err := db.CreateDB()
+
 	if err != nil {
 		panic(err)
 	}
