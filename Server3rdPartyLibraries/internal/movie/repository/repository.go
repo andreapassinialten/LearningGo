@@ -3,7 +3,6 @@ package repository
 import (
 	"Server3rdPartyLibraries/db"
 	"Server3rdPartyLibraries/internal/movie"
-	"fmt"
 	"github.com/rs/zerolog/log"
 )
 
@@ -22,7 +21,12 @@ func NewRepo(db *db.MoviesDB) RepositorySQLITE {
 }
 
 func (r RepositorySQLITE) CreateMovie(m movie.Movie) (movie.Movie, error) {
-	fmt.Println(m)
-	log.Printf("Movie is saved")
-	return movie.Movie{}, nil
+	err := r.db.DB.Create(&m).Error
+
+	if err != nil {
+		return movie.Movie{}, err
+	}
+
+	log.Info().Msgf("movie %s saved OK to the DB", m.Title)
+	return m, nil
 }
