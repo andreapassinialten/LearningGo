@@ -1,4 +1,4 @@
-package events
+package eventManger
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ type Action interface {
 }
 
 type Event struct {
-	subscribers []Action
+	Subscribers []Action
 }
 
 type EventManager struct {
@@ -22,13 +22,14 @@ var lock = &sync.Mutex{}
 
 var singleInstance *EventManager
 
-func getInstance() *EventManager {
+func GetInstance() *EventManager {
 	if singleInstance == nil {
 		lock.Lock()
 		defer lock.Unlock()
 		if singleInstance == nil {
 			fmt.Println("Creating single instance now.")
 			singleInstance = &EventManager{}
+			singleInstance.events = make(map[int](*Event), 0)
 		} else {
 			fmt.Println("Single instance already created.")
 		}
@@ -63,8 +64,8 @@ func (e *EventManager) RemoveFromKey(key int) {
 func (e *EventManager) Invoke(event *Event, in string) {
 	for key, value := range (*e).events { // Order not specified
 		if value == event {
-			for i := 0; i < len((*e).events[key].subscribers); i++ {
-				(*e).events[key].subscribers[i].Call(in)
+			for i := 0; i < len((*e).events[key].Subscribers); i++ {
+				(*e).events[key].Subscribers[i].Call(in)
 			}
 		}
 	}
